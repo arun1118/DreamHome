@@ -24,9 +24,7 @@ app.listen(3000,()=>{
 
 
 app.use((err,req,res,next)=>{
-    console.log("reaching");
     const statusCode=err.statusCode || 500;
     const message=err.message || "Internal server Error";
-    console.log(statusCode,message);
     res.status(statusCode).json({success: false, statusCode, message});
 })
