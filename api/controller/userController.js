@@ -29,3 +29,16 @@ export const updateUser= async (req, res, next)=>{
         next(error);
     }
 }
+
+export const deleteUser=async (req,res,next)=>{
+    const IDofUserDelete=req.params.id;
+    if(req.user.id!=IDofUserDelete) next(errorHandler(401, 'Invalid User trying to delete account'));
+
+    try {
+        await User.findByIdAndDelete(IDofUserDelete);
+        res.clearCookie('access_token');
+        res.status(200).json({message : 'User has been deleted....'});
+    } catch (error) {
+        next(error);
+    }
+}
