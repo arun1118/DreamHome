@@ -91,7 +91,8 @@ const CreateListing = () => {
             if(+formData.regularPrice < +formData.discountPrice) return setError('Discont Price must be lower than Regular price');
             setLoading(true);
             setError(false);
-            console.log(uploadFormData);
+            const uploadFormData={...formData, userRef: currentUser._id};
+            // console.log(uploadFormData);
             const res=await fetch(`/api/listing/create`,{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(uploadFormData)});
             const data=await res.json();
             setLoading(false);
