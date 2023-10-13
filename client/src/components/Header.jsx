@@ -8,18 +8,20 @@ const Header = () => {
     const [searchTerm,setSearchTerm]=useState('');
     const navigate=useNavigate();
 
-    function handleSubmit(e){
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const urlParams=new URLSearchParams(window.location.search);
-        urlParams.set('searchTerm',searchTerm);
-        const searchQuery=urlParams.toString();
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('searchTerm', searchTerm);
+        const searchQuery = urlParams.toString();
         navigate(`/search?${searchQuery}`);
-    }
+    };
 
     useEffect(()=>{
-        const urlParams=new URLSearchParams(window.location.search);
+        const urlParams=new URLSearchParams(location.search);
         const searchTermFromURL=urlParams.get('searchTerm');
-        setSearchTerm(searchTermFromURL);
+        if(searchTermFromURL){
+            setSearchTerm(searchTermFromURL);
+        }
     },[location.search])
 
     return (
