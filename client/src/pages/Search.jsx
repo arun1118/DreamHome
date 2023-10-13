@@ -17,6 +17,7 @@ const Search = () => {
 
     const [loading, setLoading]=useState(false);
     const [listings, setListings]=useState([]);
+    const [showMore,setShowMore]=useState(false);
 
     const handleChange=(e)=>{
         if(e.target.id==='all' || e.target.id==='sale' || e.target.id==='rent'){
@@ -60,9 +61,12 @@ const Search = () => {
 
         const fetchListing=async()=>{
             setLoading(true);
+            setShowMore(false);
             const searchQuery=urlParams.toString();
             const res=await fetch(`/api/listing/get?${searchQuery}`)
             const data=await res.json();
+            if(data.length>8) setShowMore(true);
+            else setShowMore(false);
             // if(data.success===false){
             //     console.log(data.message);
             // }
@@ -85,6 +89,18 @@ const Search = () => {
         urlParams.set("order",sidebardata.order)
         const searchQuery=urlParams.toString();
         navigate(`/search?${searchQuery}`);
+    }
+
+    async function onShowMoreClick(){
+        const numberOfListings=listings.length;
+        const startIndex=numberOfListings;
+        const urlParams=new URLSearchParams(location.search);
+        urlParams.set('startIndex', startIndex);
+        const searchQuery=urlParams.toString();
+        const res=await fetch(`/api/listing/get?${searchQuery}`);
+        const data=await res.json();
+        if(data.length < 9) setShowMore(false);
+        setListings([...listings, ...data]);
     }
 
     return (
@@ -137,6 +153,13 @@ const Search = () => {
                 {loading && (<p className='text-xl text-slate-700 text-center w-full'>Loading...</p>)}
                 {!loading && listings.length===0 && (<p className='text-xl text-slate-700'>No Listing found for this query!!</p>)}
                 {!loading && listings && listings.map((listing)=> <ListingItem key={listing._id} listing={listing}/>)}
+
+                {
+                showMore &&
+                (<button onClick={onShowMoreClick} className='text-green-700 p-7 hover:underline w-full text-center'>
+                    Show More
+                </button>)
+                }
             </div>
         </div>
       </div>
