@@ -5,15 +5,19 @@ import SwiperCore from 'swiper';
 import {Navigation} from 'swiper/modules';
 import 'swiper/css/bundle';
 import { FaBath, FaBed, FaChair, FaMapMarkedAlt, FaMapMarkerAlt, FaParking, FaShare } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import Contact from '../components/Contact';
 
 const Listing = () => {
     const params=useParams();
     SwiperCore.use([Navigation]);
+    const {currentUser}=useSelector((state)=> state.user)
 
     const [listing,setListing]=useState(null);
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState(false);
     const [copied,setCopied]=useState(false);
+    const [contact,setContact]=useState(false);
 
 
     useEffect(()=>{
@@ -63,7 +67,7 @@ const Listing = () => {
                     }}
                 />
                 </div>
-                {copied && (<p className='fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2'> Link copied! </p>)}
+                {copied && (<h1 className='fixed top-[23%] right-[5%] z-10 rounded-md bg-blue-400 p-2'> Link copied! </h1>)}
                 <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
                     <p className='text-2xl font-semibold'>
                         {listing.name} - ₹{' '}
@@ -118,6 +122,13 @@ const Listing = () => {
                             }
                         </li>
                     </ul>
+                    {
+                        currentUser && listing.userRef!==currentUser._id && !contact &&
+                        (<button onClick={()=> setContact(true)} className='bg-slate-700 text-white uppercase hover:opacity-90 p-3 rounded-lg'>Contact landlord</button>)
+                    }
+                    {
+                        contact && <Contact listing={listing}/>
+                    }
                 </div>
             </div>
             )}
