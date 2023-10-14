@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?offer=true&limit=3');
+        const res = await fetch('/api/listing/get?offer=true&limit=4');
         const data = await res.json();
         setOfferListings(data);
         fetchRentListings();
@@ -37,7 +37,7 @@ export default function Home() {
 
     const fetchSaleListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?type=sale&limit=3');
+        const res = await fetch('/api/listing/get?type=sale&limit=4');
         const data = await res.json();
         setSaleListings(data);
       } catch (error) {
@@ -51,10 +51,10 @@ export default function Home() {
 
       <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>
         <h1 className='text-slate-700 font-bold text-3xl lg:text-6xl'>
-          Find you perfect <span className='text-slate-500'>Home</span> <br />without the hassle.
+          Your partner in finding, <br /> your <span className='text-slate-500'>Dream Home.</span>.
         </h1>
         <div className='text-gray-400 text-xs sm:text-sm'>
-          DreamHome simplifies the home search process and helps you find the best home that you have always desired to.
+          DreamHome simplifies the home search process and helps you find the best home that you have always desired for.
           <br />
           We have a wide range of properties to choose from, and many filter options to select the suitable one.
         </div>

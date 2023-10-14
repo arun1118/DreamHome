@@ -138,8 +138,8 @@ const Search = () => {
                 <div className='flex items-center gap-2'>
                     <label className='font-semibold'>Sort:</label>
                     <select id="sort_order" className='border rounded-lg p-3' onChange={handleChange} defaultValue={'created_at_desc'}>
-                        <option value="regularPrice_desc">Price low to high</option>
-                        <option value="regularPrice_asc">Price high to low</option>
+                        <option value="regularPrice_desc">Price high to low</option>
+                        <option value="regularPrice_asc">Price low to high</option>
                         <option value="createdAt_desc">Latest</option>
                         <option value="createdAt_asc">Oldest</option>
                     </select>
