@@ -131,92 +131,98 @@ const Profile = () => {
     }
 
     return (
-      <div className='p-3 max-w-lg mx-auto'>
+      <div className='p-3'>
         <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
-        <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-          <input onChange={(e)=> setFile(e.target.files[0])} type='file' ref={imgRef} accept='image/*' hidden/>
-          <img onClick={()=>{imgRef.current.click()}} src={formData?.avatar || currentUser.avatar} alt="profile"
-            className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'/>
-          <p className='self-center text-sm'>
-            {
-            fileUploadError
-            ?
-            (<span className='text-red-700'>Error Uploading Image, Try again!! 	&#40;Image should be less than 2mb&#41; </span>)
-            :
-            fileUploadProgress>0 && fileUploadProgress<100
-            ?
-            (<span className='text-slate-700'>{`Uploading ${fileUploadProgress}%...`}</span>)
-            :
-            fileUploadProgress===100
-            ?
-            (<span className='text-green-700'>Image uploaded successfully.</span>)
-            :
-            (<></>)
+        <div className='flex flex-row gap-48 justify-center'>
+            {userListings && userListings.length>0 && 
+            <div className='flex flex-col gap-4 flex-1'>
+              <h1 className='font-semibold mt-7 text-2xl text-center'>Your Listings</h1>
+              {
+              userListings.map((listing)=>{
+                return(
+                  <div key={listing._id} className='flex items-center justify-between p-3 border rounded-lg gap-4'>
+                    <Link to={`/listing/${listing._id}`}>
+                      <img src={listing.imageUrls[0]} alt="listing-image" className='w-16 h-16 object-contain'/>
+                    </Link>
+                   <Link to={`/listing/${listing._id}`} className='text-slate-700 font-semibold truncate hover:underline flex-1'>
+                      <p>{listing.name}</p>
+                   </Link>
+                    <div className='flex flex-col items-center'>
+                      <button onClick={()=> handleListingDelete(listing._id)} className='uppercase text-red-700'>Delete</button>
+                      <Link to={`/update-listing/${listing._id}`}>
+                       <button className='uppercase text-green-700'>Edit</button>
+                      </Link>
+                    </div>
+                  </div>
+                )
+              })
+              }
+            </div>
             }
-          </p>
-          <input
-          type='text' 
-          id="username" 
-          placeholder='username' 
-          className='border p-3 rounded-lg' 
-          defaultValue={currentUser.username}
-          onChange={handleChange}
-          />
-          <input 
-          type='email' 
-          id="email" 
-          placeholder='email' 
-          className='border p-3 rounded-lg' 
-          defaultValue={currentUser.email}
-          onChange={handleChange}
-          />
-          <input 
-          type='password' 
-          id="password" 
-          placeholder='password' 
-          className='border p-3 rounded-lg'
-          onChange={handleChange}
-          />
-          <button className='bg-slate-700 rounded-lg p-3 hover:opacity-95 disabled:opacity-80 uppercase text-white' disabled={loading}>
-            {loading ? 'Loading...' : 'Update'}
-          </button>
-          <Link className='bg-green-700 p-3 uppercase rounded-r-lg text-center text-white hover:opacity-90' to={"/create-listing"}>
-          Create Listing
-          </Link>
-        </form>
-        <div className='flex justify-between mt-5'>
-          <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete Account</span>
-          <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>Sign Out</span>
-        </div>
-        <p className='text-red-700 mt-5'>{error ? error : ''}</p>
-        <p className='text-green-700 mt-5'>{updateSuccess ? "Successfully updated..." : ''}</p>
-        <button onClick={handleShowListings} className='text-green-700 w-full'>Show Listings</button>
-        <p className='text-red-700 mt-5'>{showListingError ? 'Error fetching Listings, try again!' : ''}</p>
-        {userListings && userListings.length>0 && 
-        <div className='flex flex-col gap-4'>
-          <h1 className='font-semibold mt-7 text-2xl text-center'>Your Listings</h1>
-          {
-          userListings.map((listing)=>{
-            return(
-              <div key={listing._id} className='flex items-center justify-between p-3 border rounded-lg gap-4'>
-                <Link to={`/listing/${listing._id}`}>
-                  <img src={listing.imageUrls[0]} alt="listing-image" className='w-16 h-16 object-contain'/>
-                </Link>
-                <Link to={`/listing/${listing._id}`} className='text-slate-700 font-semibold truncate hover:underline flex-1'>
-                  <p>{listing.name}</p>
-                </Link>
-                <div className='flex flex-col items-center'>
-                  <button onClick={()=> handleListingDelete(listing._id)} className='uppercase text-red-700'>Delete</button>
-                  <Link to={`/update-listing/${listing._id}`}>
-                    <button className='uppercase text-green-700'>Edit</button>
-                  </Link>
-                </div>
-              </div>
-            )
-          })
-          }
-        </div>
-        }
+
+          <div className='flex-1 max-w-lg'>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+              <input onChange={(e)=> setFile(e.target.files[0])} type='file' ref={imgRef} accept='image/*' hidden/>
+              <img onClick={()=>{imgRef.current.click()}} src={formData?.avatar || currentUser.avatar} alt="profile"
+                className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'/>
+              <p className='self-center text-sm'>
+                {
+                fileUploadError
+                ?
+                (<span className='text-red-700'>Error Uploading Image, Try again!! 	&#40;Image should be less than 2mb&#41; </span>)
+                :
+                fileUploadProgress>0 && fileUploadProgress<100
+                ?
+                (<span className='text-slate-700'>{`Uploading ${fileUploadProgress}%...`}</span>)
+                :
+                fileUploadProgress===100
+                ?
+                (<span className='text-green-700'>Image uploaded successfully.</span>)
+                :
+                (<></>)
+                }
+              </p>
+              <input
+              type='text' 
+              id="username" 
+              placeholder='username' 
+              className='border p-3 rounded-lg' 
+              defaultValue={currentUser.username}
+              onChange={handleChange}
+              />
+              <input 
+              type='email' 
+              id="email" 
+              placeholder='email' 
+              className='border p-3 rounded-lg' 
+              defaultValue={currentUser.email}
+              onChange={handleChange}
+              />
+              <input 
+              type='password' 
+              id="password" 
+              placeholder='password' 
+              className='border p-3 rounded-lg'
+              onChange={handleChange}
+              />
+              <button className='bg-slate-700 rounded-lg p-3 hover:opacity-95 disabled:opacity-80 uppercase text-white' disabled={loading}>
+                {loading ? 'Loading...' : 'Update'}
+              </button>
+              <Link className='bg-green-700 p-3 uppercase rounded-r-lg text-center text-white hover:opacity-90' to={"/create-listing"}>
+              Create Listing
+              </Link>
+            </form>
+            <div className='flex justify-between mt-5'>
+              <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete Account</span>
+              <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>Sign Out</span>
+            </div>
+            <p className='text-red-700 mt-5'>{error ? error : ''}</p>
+            <p className='text-green-700 mt-5'>{updateSuccess ? "Successfully updated..." : ''}</p>
+            <button onClick={handleShowListings} className='text-green-700 w-full'>Show Listings</button>
+            <p className='text-red-700 mt-5'>{showListingError ? 'Error fetching Listings, try again!' : ''}</p>
+          </div>
+        
+      </div>
       </div>
     )
 }
